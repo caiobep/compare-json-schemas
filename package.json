@@ -1,0 +1,71 @@
+{
+  "name": "compare-json-schemas",
+  "description": "A CLI to compare keys from JSON files",
+  "version": "0.0.0",
+  "author": "Caio Amaral Corrêa @caiobep",
+  "homepage": "https://github.com/caiobep/compare-json-schemas",
+  "bugs": "https://github.com/caiobep/compare-json-schemas/issues",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "caiobep/compare-json-schemas",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "json",
+    "validate",
+    "compare",
+    "schema"
+  ],
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "bin": {
+    "compare-json-schemas": "./bin/run"
+  },
+  "oclif": {
+    "bin": "compare-json-schemas"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "lint:fix": "npm run lint -- --fix",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "dependencies": {
+    "@oclif/command": "~1.8.0",
+    "@oclif/config": "~1.17.0",
+    "@oclif/plugin-help": "~3.2.2",
+    "tslib": "~1.14.1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "~1.26.0",
+    "@oclif/test": "~1.2.8",
+    "@types/chai": "~4.2.21",
+    "@types/jest": "~26.0.24",
+    "@types/mocha": "~5.2.7",
+    "@types/node": "~10.17.60",
+    "@typescript-eslint/eslint-plugin": "~4.28.5",
+    "eslint": "~7.31.0",
+    "eslint-config-oclif": "~3.1.0",
+    "eslint-config-oclif-typescript": "~0.1.0",
+    "eslint-config-prettier": "~8.3.0",
+    "eslint-config-standard": "~16.0.3",
+    "eslint-plugin-header": "~3.1.1",
+    "eslint-plugin-import": "~2.23.4",
+    "eslint-plugin-jest": "~24.4.0",
+    "eslint-plugin-node": "~11.1.0",
+    "eslint-plugin-prettier": "~3.4.0",
+    "eslint-plugin-promise": "~5.1.0",
+    "jest": "~27.0.6",
+    "jest-diff": "~27.0.6",
+    "npm-run-all": "~4.1.5",
+    "prettier": "~2.3.2",
+    "ts-jest": "~27.0.4",
+    "ts-node": "~8.10.2",
+    "typescript": "~3.9.10"
+  }
+}
