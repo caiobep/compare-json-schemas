@@ -24,7 +24,7 @@
   "rules": {
     "@typescript-eslint/no-unnecessary-type-arguments": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
-    "node/shebang": "error"
+    "node/no-missing-import": 0
   }
 }
 
