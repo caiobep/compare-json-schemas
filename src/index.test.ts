@@ -1,41 +1,116 @@
-import { filterNonAsciiAndWhitespace, runCli } from './test-utils'
+import cli from '.'
+import fs from 'fs/promises'
+
+jest.mock('fs/promises', () => ({
+  stat: jest.fn(() => ({
+    isFile: () => true,
+  })),
+  readFile: jest.fn(),
+}))
+
+const sendPromiseAsString = <T>(e: T): Promise<string> =>
+  Promise.resolve(JSON.stringify(e))
+
+const processExitCode = jest.spyOn(process, 'exit').mockImplementation()
+
+const processStdoutMessage = jest
+  .spyOn(process.stdout, 'write')
+  .mockImplementation()
+
+const processStdErrMessage = jest
+  .spyOn(process.stderr, 'write')
+  .mockImplementation()
+
+const helpMessage = jest
+  .spyOn(cli.prototype, '_help' as any)
+  .mockReturnValue('help text')
 
 describe('compare-json-schemas', () => {
-  it('Should print help when no arguments are provided', async () => {
-    const compareJsonSchemas = await runCli()
-
-    const expectedHelpText = filterNonAsciiAndWhitespace(`
-      Compare JSON files schemas
-
-      USAGE
-        $ compare-json-schemas
-
-      OPTIONS
-        -h, --help     show CLI help
-        -v, --version  show CLI version
-    `)
-
-    const stdoutMessage = filterNonAsciiAndWhitespace(compareJsonSchemas.stdout)
-
-    expect(stdoutMessage).toBe(expectedHelpText)
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
-  it('Should print help when the -h or --help flag is provided', async () => {
-    const runWithHelpAlias = (await runCli('--help')).stdout
-    const runWithHelpFlag = (await runCli('-h')).stdout
+  it('Should print help when not enough arguments are provided', async () => {
+    await cli.run([])
 
-    const expectedHelpText = filterNonAsciiAndWhitespace(`
-      Compare JSON files schemas
+    expect(helpMessage).toHaveBeenCalled()
+    expect(processStdErrMessage).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Missing argument. Please provide at least 2 file paths',
+      ),
+    )
+    expect(processExitCode).toHaveBeenCalledWith(1)
+  })
 
-      USAGE
-        $ compare-json-schemas
+  it('Should print missing keys from json files when paths for 2 valid json files are provided', async () => {
+    const fsReadFile = jest
+      .spyOn(fs, 'readFile')
+      .mockReturnValue(sendPromiseAsString({ example: true }))
 
-      OPTIONS
-        -h, --help     show CLI help
-        -v, --version  show CLI version
-    `)
+    await cli.run(['./fake-file1.json', './fake-file2.json'])
 
-    expect(filterNonAsciiAndWhitespace(runWithHelpAlias)).toBe(expectedHelpText)
-    expect(filterNonAsciiAndWhitespace(runWithHelpFlag)).toBe(expectedHelpText)
+    expect(fsReadFile).toHaveBeenCalledWith('./fake-file1.json', {
+      encoding: 'utf8',
+    })
+    expect(fsReadFile).toHaveBeenCalledWith('./fake-file2.json', {
+      encoding: 'utf8',
+    })
+    expect(processExitCode).toHaveBeenCalledWith(0)
+    expect(processStdoutMessage).toHaveBeenNthCalledWith(
+      1,
+      '✅ All files schema matches',
+    )
+  })
+
+  it('Should indicate the missing keys on json file', async () => {
+    const schemaSource = {
+      name: 'Ada Lovelace',
+      dateOfBirth: 'December 10, 1815',
+    }
+
+    const schemaInstance = {
+      name: 'Charles Babage',
+    }
+
+    jest
+      .spyOn(fs, 'readFile')
+      .mockReturnValueOnce(sendPromiseAsString(schemaSource))
+      .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
+
+    await cli.run(['./fake-file1.json', './fake-file2.json'])
+
+    expect(processStdErrMessage).toHaveBeenCalledWith(
+      expect.stringContaining('dateOfBirth'),
+    )
+    expect(processExitCode).toHaveBeenCalledWith(1)
+  })
+
+  it('Should print missing nested object keys', async () => {
+    const schemaSource = {
+      name: 'Doug Engelbart',
+      achievements: {
+        projects: ['mouse'],
+        awards: ['Turing Award', 'MORE'],
+      },
+    }
+
+    const schemaInstance = {
+      name: 'Alan Kay',
+      achievements: {
+        projects: ['Smalltalk'],
+      },
+    }
+
+    jest
+      .spyOn(fs, 'readFile')
+      .mockReturnValueOnce(sendPromiseAsString(schemaSource))
+      .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
+
+    await cli.run(['./fake-file1.json', './fake-file2.json'])
+
+    expect(processStdErrMessage).toHaveBeenCalledWith(
+      expect.stringContaining('awards'),
+    )
+    expect(processExitCode).toHaveBeenCalledWith(1)
   })
 })
