@@ -1,7 +1,7 @@
 {
   "name": "compare-json-schemas",
   "description": "A CLI to compare keys from JSON files",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "author": "Caio Amaral Corrêa @caiobep",
   "homepage": "https://github.com/caiobep/compare-json-schemas",
   "bugs": "https://github.com/caiobep/compare-json-schemas/issues",
@@ -35,8 +35,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "test:staged": "npm run test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
-    "version": "oclif-dev readme && git add README.md"
+    "test:ci": "npm test -- --coverage"
   },
   "dependencies": {
     "@oclif/command": "~1.8.0",
