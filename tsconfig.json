@@ -12,6 +12,10 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src/**/*"
-  ]
+    "src",
+    "src/globals.d.ts"
+  ],
+  "ts-node": {
+    "files": true
+  }
 }

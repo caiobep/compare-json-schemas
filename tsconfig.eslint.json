@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "rules": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": [
+    "src",
+    "*.ts",
+    "*.js",
+  ]
+}
