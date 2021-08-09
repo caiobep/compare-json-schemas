@@ -91,6 +91,9 @@ describe('compare-json-schemas', () => {
       achievements: {
         projects: ['mouse'],
         awards: ['Turing Award', 'MORE'],
+        education: {
+          college: 'Berkely',
+        },
       },
     }
 
@@ -110,6 +113,9 @@ describe('compare-json-schemas', () => {
 
     expect(processStdErrMessage).toHaveBeenCalledWith(
       expect.stringContaining('awards'),
+    )
+    expect(processStdErrMessage).toHaveBeenCalledWith(
+      expect.stringContaining('education'),
     )
     expect(processExitCode).toHaveBeenCalledWith(1)
   })

@@ -4,7 +4,7 @@ import GenerateSchema from 'generate-schema'
 import Ajv from 'ajv-draft-04'
 import { makeAllTreeNodesRequired } from './make-all-tree-nodes-required'
 
-const ajv = new Ajv()
+const ajv = new Ajv({ allErrors: true })
 
 class CompareJsonSchemas extends Command {
   static description = 'Compare JSON files schemas'
@@ -73,7 +73,7 @@ class CompareJsonSchemas extends Command {
 
     if (validateJsonSchema.errors !== null) {
       process.stderr
-        .write(`🚫 File schemas do not match.\r\n Details: \r\n ${validateJsonSchema.errors
+        .write(`🚫 File schemas do not match.\r\n Details: \r\n  ${validateJsonSchema.errors
         ?.map(e => `  - ${e.message}`)
         .join('\r\n  ')}
       `)
