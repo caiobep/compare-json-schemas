@@ -7,7 +7,7 @@ const dev = fs.existsSync(project)
 const isTest = process.env.NODE_ENV === "test"
 
 if (dev || isTest) {
-  require('ts-node').register({project})
+  require('ts-node').register({ project })
 }
 
 require(`../${dev ? 'src' : 'lib'}`).run()

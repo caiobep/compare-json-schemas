@@ -1,15 +1,21 @@
 module.exports = {
+  preset: 'ts-jest',
   testMatch: [
     `<rootDir>/src/**/*.(test).{js,jsx,ts,tsx}`,
     `<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}`,
   ],
   setupFilesAfterEnv: ['jest-extended'],
-  transform: { '\\.ts$': 'ts-jest' },
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js', 'json'],
   coverageReporters: ['lcov', 'text-summary'],
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['/templates/'],
+  verbose: true,
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',
+    },
+  },
   coverageThreshold: {
     global: {
       branches: 100,
