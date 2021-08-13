@@ -4,11 +4,11 @@
   "version": "1.0.0-alpha.0",
   "author": "Caio Amaral Corrêa @caiobep",
   "homepage": "https://github.com/caiobep/compare-json-schemas",
+  "repository": "https://github.com/caiobep/compare-json-schemas",
   "bugs": "https://github.com/caiobep/compare-json-schemas/issues",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": "caiobep/compare-json-schemas",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -31,7 +31,7 @@
   "scripts": {
     "lint": "eslint --cache --ext .ts,js,tsx,jsx",
     "lint:fix": "npm run lint -- --fix",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -p ./tsconfig.build.json && oclif-dev readme",
     "test": "jest --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "test:staged": "npm run test -- --findRelatedTests",
@@ -44,6 +44,7 @@
     "@oclif/plugin-help": "~3.2.2",
     "ajv": "~8.6.2",
     "ajv-draft-04": "1.0.0",
+    "chalk": "~2.4.2",
     "fp-ts": "~2.11.1",
     "generate-schema": "~2.6.0",
     "json-diff": "~0.5.4",

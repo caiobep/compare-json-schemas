@@ -1,88 +1,87 @@
-import { Command, flags } from '@oclif/command'
 import fs from 'fs/promises'
 import GenerateSchema from 'generate-schema'
 import Ajv from 'ajv-draft-04'
 import { makeAllTreeNodesRequired } from './make-all-tree-nodes-required'
+import displayHelp from './messages/display-help'
+import {
+  ValidatedFiles,
+  wrongSchemaMessage,
+} from './messages/wrong-schema-message'
+import { FileState } from './index.types'
+import { version } from './messages/version'
 
 const ajv = new Ajv({ allErrors: true })
 
-class CompareJsonSchemas extends Command {
-  static description = 'Compare JSON files schemas'
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-  static flags = {
-    version: flags.version({ char: 'v' }),
-    help: flags.help({ char: 'h' }),
+const flags = {
+  version: ['-v', '--version'],
+  help: ['-h', '--help'],
+}
+
+const main = async (args: string[]): Promise<void> => {
+  if (args.some(e => flags.version.includes(e))) {
+    process.stderr.write(version)
+    process.exit(1)
   }
 
-  static args = [
-    {
-      name: 'schema_source_file_path',
-      required: false,
-      description: 'JSON file to get the schema from',
-    },
-    {
-      name: 'instance_of_schema_file_path',
-      required: false,
-      description: 'JSON file to validate conformity to schema',
-    },
-  ]
+  if (args.length < 2 || args.some(i => i === undefined || i === '')) {
+    const missingKeyMessage = `⚠️️  Missing argument. Please provide at least 2 file paths\r\n\r\n`
 
-  async run(): Promise<void> {
-    const { args } = this.parse(CompareJsonSchemas)
+    process.stdout.write(missingKeyMessage)
+    await delay(2000)
+  }
 
-    if (Object.values(args).some(i => i === undefined || i === '')) {
-      const exitMessage = `⚠️️ Missing argument. Please provide at least 2 file paths\r\n\r\n ${this._help()}`
+  if (args.length >= 2 && args.every(i => i !== undefined && i !== '')) {
+    const namedArgs = args.map((filePath, index) => ({
+      filePath,
+      name:
+        index === 0
+          ? `SCHEMA_SOURCE_FILE`
+          : `INSTANCE_OF_SCHEMA_FILE_PATH_${index}`,
+    }))
 
-      process.stderr.write(exitMessage)
-      process.exit(1)
-      // eslint-disable-next-line no-unreachable
-      return
-    }
+    const files: Set<FileState> = new Set()
 
-    const files: Set<{
-      name: string
-      filePath: string
-      fileContent: Record<string, any>
-    }> = new Set()
-
-    for await (const [name, filePath] of Object.entries(args)) {
-      const isFileAccessible = (await fs.stat(filePath)).isFile()
-      if (!isFileAccessible) {
-        throw new Error(
-          `${filePath} provided as ${name.toUpperCase()} is not a valid path`,
-        )
+    for await (const { name, filePath } of namedArgs) {
+      try {
+        const fileContent = await fs.readFile(filePath, { encoding: 'utf8' })
+        files.add({ name, filePath, fileContent: JSON.parse(fileContent) })
+      } catch (error) {
+        throw new Error(`Could Not access file. Details ${error}\r\n`)
       }
-
-      const fileContent = await fs.readFile(filePath, { encoding: 'utf8' })
-      if (!fileContent) {
-        throw new Error(`Could not read ${name.toUpperCase} from ${filePath}`)
-      }
-
-      files.add({ name, filePath, fileContent: JSON.parse(fileContent) })
     }
 
     const [referenceObject, ...objectInstances] = [...files]
-    const schema = await GenerateSchema.json(referenceObject.fileContent)
+    const schema = GenerateSchema.json(referenceObject.fileContent)
     const requiredSchema = makeAllTreeNodesRequired(schema)
 
     const validateJsonSchema = ajv.compile(requiredSchema)
 
-    await Promise.all(
-      objectInstances.map(async e => validateJsonSchema(e.fileContent)),
-    )
+    const validatedFiles = objectInstances.map(e => {
+      const isFileValid = validateJsonSchema(e.fileContent)
+      const errors = isFileValid ? undefined : validateJsonSchema.errors
 
-    if (validateJsonSchema.errors !== null) {
-      process.stderr
-        .write(`🚫 File schemas do not match.\r\n Details: \r\n  ${validateJsonSchema.errors
-        ?.map(e => `  - ${e.message}`)
-        .join('\r\n  ')}
-      `)
+      return {
+        ...e,
+        filePath: e.filePath,
+        isFileValid,
+        errors,
+      }
+    }) as ValidatedFiles[]
+
+    if (validatedFiles.some(s => !s.isFileValid)) {
+      const errorMessage = wrongSchemaMessage(validatedFiles)
+      process.stderr.write(errorMessage)
       process.exit(1)
     }
 
-    process.stdout.write('✅ All files schema matches')
+    process.stdout.write('✅ All files schema matches \r\n')
     process.exit(0)
   }
+
+  displayHelp()
 }
 
-export = CompareJsonSchemas
+export { main }
+export default main

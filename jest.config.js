@@ -4,7 +4,7 @@ module.exports = {
     `<rootDir>/src/**/*.(test).{js,jsx,ts,tsx}`,
     `<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}`,
   ],
-  setupFilesAfterEnv: ['jest-extended'],
+  setupFilesAfterEnv: ['jest-extended', './test/setEnvVars.js'],
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js', 'json'],
   coverageReporters: ['lcov', 'text-summary'],
