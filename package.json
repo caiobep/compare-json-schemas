@@ -31,7 +31,7 @@
   "scripts": {
     "lint": "eslint --cache --ext .ts,js,tsx,jsx",
     "lint:fix": "npm run lint -- --fix",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -p ./tsconfig.build.json && oclif-dev readme",
     "test": "jest --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "test:staged": "npm run test -- --findRelatedTests",
