@@ -7,8 +7,7 @@ export const recursiveAddRequiredPropertyOnTreeNodes: RecursiveAddRequirePropert
   (acc, currentValue) => {
     const [key, value] = currentValue
 
-    const isValueAnObject =
-      (value as Record<string, unknown>)?.type === 'object'
+    const isValueAnObject = (value as Record<string, unknown>).type === 'object'
 
     if (key === 'properties' || isValueAnObject) {
       const nodeValue = Object.entries(value as Record<string, unknown>).reduce(
