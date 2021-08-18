@@ -1,6 +1,6 @@
 import cli from '.'
 import fs from 'fs/promises'
-import { helpMessage } from './messages/display-help'
+import { helpMessage } from './messages'
 import wrongSchemaMessage from './messages/wrong-schema-message'
 
 jest.mock('./env', () => ({
@@ -10,9 +10,6 @@ jest.mock('./env', () => ({
 jest.mock('fs/promises', () => ({
   readFile: jest.fn(),
 }))
-
-const sendPromiseAsString = <T>(e: T): Promise<string> =>
-  Promise.resolve(JSON.stringify(e))
 
 const processExitCode = jest.spyOn(process, 'exit').mockImplementation(() => {
   // eslint-disable-next-line no-throw-literal
@@ -51,8 +48,8 @@ describe('compare-json-schemas', () => {
     try {
       jest
         .spyOn(fs, 'readFile')
-        .mockReturnValueOnce(sendPromiseAsString({ example: true }))
-        .mockReturnValueOnce(sendPromiseAsString({ example: true }))
+        .mockResolvedValueOnce(String({ example: true }))
+        .mockResolvedValueOnce(String({ example: true }))
 
       await cli(['./fake-file1.json', './fake-file2.json'])
     } catch {}
@@ -100,8 +97,8 @@ describe('compare-json-schemas', () => {
 
     jest
       .spyOn(fs, 'readFile')
-      .mockReturnValueOnce(sendPromiseAsString(schemaSource))
-      .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
+      .mockResolvedValueOnce(JSON.stringify(schemaSource))
+      .mockResolvedValueOnce(JSON.stringify(schemaInstance))
 
     try {
       await cli(['./fake-file1.json', './fake-file2.json'])
@@ -135,8 +132,8 @@ describe('compare-json-schemas', () => {
 
       jest
         .spyOn(fs, 'readFile')
-        .mockReturnValueOnce(sendPromiseAsString(schemaSource))
-        .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
+        .mockResolvedValueOnce(JSON.stringify(schemaSource))
+        .mockResolvedValueOnce(JSON.stringify(schemaInstance))
 
       await cli(['./fake-file1.json', './fake-file2.json'])
     } catch {}
@@ -180,9 +177,9 @@ describe('compare-json-schemas', () => {
 
       jest
         .spyOn(fs, 'readFile')
-        .mockReturnValueOnce(sendPromiseAsString(schemaSource))
-        .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
-        .mockReturnValueOnce(sendPromiseAsString(schemaInstance2))
+        .mockResolvedValueOnce(JSON.stringify(schemaSource))
+        .mockResolvedValueOnce(JSON.stringify(schemaInstance))
+        .mockResolvedValueOnce(JSON.stringify(schemaInstance2))
 
       await cli(['./fake-file1.json', './fake-file2.json', './fake-file3.json'])
     } catch {}
@@ -244,9 +241,9 @@ describe('compare-json-schemas', () => {
 
       jest
         .spyOn(fs, 'readFile')
-        .mockReturnValueOnce(sendPromiseAsString(schemaSource))
-        .mockReturnValueOnce(sendPromiseAsString(schemaInstance))
-        .mockReturnValueOnce(sendPromiseAsString(schemaInstance2))
+        .mockResolvedValueOnce(JSON.stringify(schemaSource))
+        .mockResolvedValueOnce(JSON.stringify(schemaInstance))
+        .mockResolvedValueOnce(JSON.stringify(schemaInstance2))
 
       await cli(['./fake-file1.json', './fake-file2.json', './fake-file3.json'])
     } catch {}
@@ -266,5 +263,88 @@ describe('compare-json-schemas', () => {
 
     expect(processStdErrMessage).toHaveBeenCalledWith(expectedErrorMessage)
     expect(processExitCode).toHaveBeenCalledWith(1)
+  })
+
+  it('Should validate JSONC/JSON5 files ignoring comments ', async () => {
+    try {
+      const schemaSource = `{
+        name: 'Doug Engelbart',
+        // The better we get at getting better,
+        // the faster we will get better.
+        achievements: {
+          projects: ['mouse'],
+          awards: ['Turing Award', 'MORE'],
+          education: {
+            college: 'Berkely',
+          },
+        },
+      }`
+
+      const schemaInstance = `{
+        name: 'Alan Kay',
+        achievements: {
+          projects: ['Smalltalk'],
+          awards: ['Turing Award', 'Charles Stark Draper Prize', 'Kyoto Prize'],
+          education: {
+            college: 'Utah',
+          }
+        },
+      }`
+
+      jest
+        .spyOn(fs, 'readFile')
+        .mockResolvedValueOnce(schemaSource)
+        .mockResolvedValueOnce(schemaInstance)
+
+      await cli(['./fake-file1.json', './fake-file2.json'])
+    } catch {}
+
+    expect(processStdoutMessage).toHaveBeenCalledWith(
+      expect.stringContaining('✅ All files schema matches'),
+    )
+    expect(processExitCode).toHaveBeenCalledWith(0)
+  })
+
+  it('Should validate YAML against JSON files ignoring comments ', async () => {
+    try {
+      const schemaSource = `{
+        name: 'Doug Engelbart',
+        // The better we get at getting better,
+        // the faster we will get better.
+        achievements: {
+          projects: ['mouse'],
+          awards: ['Turing Award', 'MORE'],
+          education: {
+            college: 'Berkely',
+          },
+        },
+      }`
+
+      const schemaInstance = `
+name: Alan Kay
+achievements:
+# comment here
+  projects:
+  - Smalltalk
+  awards:
+  - Turing Award
+  - Charles Stark Draper Prize
+  - Kyoto Prize
+  education:
+    college: Utah
+      `
+
+      jest
+        .spyOn(fs, 'readFile')
+        .mockResolvedValueOnce(schemaSource)
+        .mockResolvedValueOnce(schemaInstance)
+
+      await cli(['./fake-file1.json', './fake-file2.json'])
+    } catch {}
+
+    expect(processStdoutMessage).toHaveBeenCalledWith(
+      expect.stringContaining('✅ All files schema matches'),
+    )
+    expect(processExitCode).toHaveBeenCalledWith(0)
   })
 })

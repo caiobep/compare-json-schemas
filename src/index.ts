@@ -1,9 +1,7 @@
-import displayHelp from './messages/display-help'
-import { wrongSchemaMessage } from './messages/wrong-schema-message'
-import { version } from './messages/version'
+import { displayHelp, version, wrongSchemaMessage } from './messages'
 import { compareSchemas } from './compare-schemas'
 import { readFiles } from './read-files'
-import { tagFilePaths } from './tag-file-pahts'
+import { tagFilePaths } from './tag-file-paths'
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -25,7 +23,7 @@ const main = async (args: string[]): Promise<void> => {
   }
 
   if (args.length >= 2 && args.every(i => i !== undefined && i !== '')) {
-    const filePathWithNames = args.map(tagFilePaths)
+    const filePathWithNames = [...new Set(args)].map(tagFilePaths)
 
     const [referenceObject, ...objectInstances] = await readFiles(
       filePathWithNames,

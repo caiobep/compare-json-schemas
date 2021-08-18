@@ -1,5 +1,6 @@
 import { FileState } from './index.types'
 import fs from 'fs/promises'
+import yaml from 'yaml'
 
 async function readFiles(
   filePathsWithName: { filePath: string; name: string }[],
@@ -8,8 +9,10 @@ async function readFiles(
 
   for await (const { name, filePath } of filePathsWithName) {
     try {
-      const fileContent = await fs.readFile(filePath, { encoding: 'utf8' })
-      filePaths.add({ name, filePath, fileContent: JSON.parse(fileContent) })
+      const file = await fs.readFile(filePath, { encoding: 'utf8' })
+      const fileContent = yaml.parse(file)
+
+      filePaths.add({ name, filePath, fileContent })
     } catch (error) {
       throw new Error(`Could Not access file. Details ${error}\r\n`)
     }

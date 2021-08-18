@@ -3,6 +3,9 @@ export type RecursiveAddRequirePropertyOnTreeNodes = (
   currentValue: [string, unknown | Record<string, unknown>],
 ) => Record<string, unknown>
 
+const isJsonOrYamlComment = (s: string): boolean =>
+  !/^((\/{2})|(\/[*])|([#])).*/.test(s)
+
 export const recursiveAddRequiredPropertyOnTreeNodes: RecursiveAddRequirePropertyOnTreeNodes =
   (acc, currentValue) => {
     const [key, value] = currentValue
@@ -15,7 +18,9 @@ export const recursiveAddRequiredPropertyOnTreeNodes: RecursiveAddRequirePropert
         {},
       )
 
-      const required = Object.keys(value as Record<string, unknown>)
+      const required = Object.keys(value as Record<string, unknown>).filter(
+        isJsonOrYamlComment,
+      )
       const addRequiredKeys = required.includes('type') ? {} : { required }
 
       return { ...acc, [key]: nodeValue, ...addRequiredKeys }
