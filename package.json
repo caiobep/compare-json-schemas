@@ -41,7 +41,8 @@
     "ajv": "~8.6.2",
     "ajv-draft-04": "1.0.0",
     "chalk": "~4.1.2",
-    "generate-schema": "~2.6.0"
+    "generate-schema": "~2.6.0",
+    "tslib": "~1.14.1"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
