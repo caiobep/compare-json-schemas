@@ -6,8 +6,6 @@
     "jest": true
   },
   "extends": [
-    "oclif",
-    "oclif-typescript",
     "standard",
     "prettier"
   ],
