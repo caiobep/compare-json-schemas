@@ -3,13 +3,13 @@
   "compilerOptions": {
     "noUnusedLocals": true,
     "removeComments": true,
-    "noUnusedParameters": true,
-    "sourceMap": true
+    "noUnusedParameters": true
   },
   "include": [
-    "src/*/**.ts"
+    "src"
   ],
   "exclude": [
-    "**.*.test.*",
+    "src/**.test.ts",
+    "src/**.test.js"
   ]
 }
