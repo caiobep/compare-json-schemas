@@ -1,19 +1,30 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "importHelpers": true,
     "module": "commonjs",
-    "outDir": "lib",
+    "lib": ["esnext"],
     "rootDir": "src",
-    "strict": true,
+    "outDir": "lib",
     "target": "es2017",
+    "moduleResolution": "node",
+
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+
+    "declaration": true,
+    "importHelpers": true,
+
+    "strict": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
     "strictPropertyInitialization": true,
-    "skipLibCheck": true,
-    "noImplicitAny": false
+
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "skipLibCheck": true
   },
   "include": [
     "src",

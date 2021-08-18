@@ -1,7 +1,15 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "noUnusedParameters": true,
+    "sourceMap": true
+  },
   "include": [
-    "src/*/**.ts",
-    "!src/*/**.test.*"
+    "src/*/**.ts"
+  ],
+  "exclude": [
+    "**.*.test.*",
   ]
 }
