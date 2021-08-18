@@ -1,6 +1,21 @@
 import chalk from 'chalk'
 import { FileState } from '../index.types'
-import { ErrorObject } from 'ajv/lib/types/index'
+
+export interface ErrorObject<
+  K extends string = string,
+  P = Record<string, any>,
+  S = unknown,
+> {
+  keyword: K
+  instancePath: string
+  schemaPath: string
+  params: P
+  propertyName?: string
+  message?: string
+  schema?: S
+  parentSchema?: Record<string, unknown>
+  data?: unknown
+}
 
 export interface ValidFile extends FileState {
   isFileValid: true
