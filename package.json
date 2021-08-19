@@ -23,9 +23,9 @@
     "/lib"
   ],
   "bin": {
-    "compare-json-schemas": "./lib/cli/run",
-    "compare-yaml-schemas": "./lib/cli/run",
-    "compare-schemas": "./lib/cli/run"
+    "compare-json-schemas": "./lib/cli/run.js",
+    "compare-yaml-schemas": "./lib/cli/run.js",
+    "compare-schemas": "./lib/cli/run.js"
   },
   "scripts": {
     "build": "npm-run-all clean lint build:typescript",
