@@ -1,9 +1,9 @@
-import cli from '.'
+import cli from './cli'
 import fs from 'fs/promises'
-import { helpMessage } from './messages'
-import wrongSchemaMessage from './messages/wrong-schema-message'
+import { helpMessage } from '../messages'
+import wrongSchemaMessage from '../messages/wrong-schema-message'
 
-jest.mock('./env', () => ({
+jest.mock('../env', () => ({
   npmPackageVersion: undefined,
 }))
 
