@@ -1,6 +1,6 @@
 # Compare Schemas
 
-[![Node.js CI](https://github.com/caiobep/compare-schemas/actions/workflows/publish.yml/badge.svg)](https://github.com/caiobep/compare-schemas/actions/workflows/publish.yml)
+[![Node.js CI](https://github.com/caiobep/compare-schemas/actions/workflows/publish.yml/badge.svg)](https://github.com/caiobep/compare-schemas/actions/workflows/publish.yml) [![codecov](https://codecov.io/gh/caiobep/compare-schemas/branch/main/graph/badge.svg?token=2HV1498TU2)](https://codecov.io/gh/caiobep/compare-schemas)
 
 > A simple CLI tool to help you compare multiple JSON/JSONC/Yaml files to check if your missing an specific key
 
