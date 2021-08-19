@@ -1,7 +1,7 @@
 {
-  "name": "compare-schemas",
+  "name": "@caicorre/compare-schemas",
   "description": "A CLI to compare keys from JSON files",
-  "version": "0.1.0",
+  "version": "v0.1.0-rc.1",
   "author": "Caio Amaral Corrêa @caiobep",
   "homepage": "https://github.com/caiobep/compare-schemas",
   "repository": "https://github.com/caiobep/compare-schemas",
