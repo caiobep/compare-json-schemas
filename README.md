@@ -1,6 +1,6 @@
-# Compare Json Schemas
+# Compare Schemas
 
-> A simple CLI tool to help you compare multiple JSON files to check if your missing an specific key
+> A simple CLI tool to help you compare multiple JSON/JSONC/Yaml files to check if your missing an specific key
 
 ## Usage
 
@@ -13,7 +13,7 @@ compare-json-schemas ./file1.json ./file2.json
 or 
 
 ```sh
-npx compare-json-schemas ./file1.json ./file2.json
+npx compare-json-schemas ./file1.json ./file2.json ./file3.yml
 ```
 
 ### How is this different from tools like the brilliant [ajv-cli](https://github.com/ajv-validator/ajv-cli) and [jsonlint-cli](https://github.com/marionebl/jsonlint-cli)
