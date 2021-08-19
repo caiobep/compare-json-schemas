@@ -9,7 +9,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   coverageReporters: ['lcov', 'text-summary'],
   collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: ['/templates/'],
+  coveragePathIgnorePatterns: ['/templates/', 'run.ts'],
   verbose: true,
   globals: {
     'ts-jest': {

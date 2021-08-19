@@ -1,4 +1,4 @@
-import cli from '.'
+import cli from './cli'
 
 jest.spyOn(process, 'exit').mockImplementation(() => {
   // eslint-disable-next-line no-throw-literal

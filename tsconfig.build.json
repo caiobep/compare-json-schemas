@@ -2,14 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noUnusedLocals": true,
-    "removeComments": true,
+    "removeComments": false,
     "noUnusedParameters": true
   },
   "include": [
     "src"
   ],
   "exclude": [
-    "src/**.test.ts",
-    "src/**.test.js"
+    "src/*/**.test.ts",
+    "src/*/**.test.js"
   ]
 }

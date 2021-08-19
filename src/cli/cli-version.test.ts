@@ -1,4 +1,4 @@
-import cli from '.'
+import cli from './cli'
 
 jest.spyOn(process, 'exit').mockImplementation(() => {
   // eslint-disable-next-line no-throw-literal
@@ -9,7 +9,7 @@ const processStdErrMessage = jest
   .spyOn(process.stderr, 'write')
   .mockImplementation()
 
-jest.mock('./env', () => ({
+jest.mock('../env', () => ({
   npmPackageVersion: 'example',
 }))
 
