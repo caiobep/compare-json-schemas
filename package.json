@@ -1,5 +1,5 @@
 {
-  "name": "@caicorre/compare-schemas",
+  "name": "compare-yml-schemas",
   "description": "A CLI to compare keys from JSON files",
   "version": "v0.1.0-rc.1",
   "author": "Caio Amaral Corrêa @caiobep",
