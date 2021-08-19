@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { version } from './version'
 
-const homepage = 'https://github.com/caiobep/compare-json-schemas'
+const homepage = 'https://github.com/caiobep/compare-schemas'
 
 const title = (s: string): string => {
   return chalk.whiteBright(chalk.bold(s))
@@ -9,9 +9,7 @@ const title = (s: string): string => {
 
 const helpMessage = `
 ${title('Usage:')}
-  compare-json-schemas ${chalk.white(
-    '[schema source file] [schema instance file]',
-  )}
+  compare-schemas ${chalk.white('[schema source file] [schema instance file]')}
 
 ${title('Readme:')}
   ${chalk.underline(homepage + '/README.md')}
@@ -25,10 +23,10 @@ ${title('Options:')}
 
 ${title('Examples:')}
   ${chalk.white('# Compare 2 JSON files')}
-  compare-json-schemas ./appsettings.json ./dev.appsettings.json
+  compare-schemas ./appsettings.json ./dev.appsettings.json
 
-  ${chalk.white('# Compare multiple json files')}
-  compare-json-schemas ./appsettings.json ./dev.appsettings.json ./qa.appsettings.json ./prd.appsettings.json
+  ${chalk.white('# Compare multiple json/yaml files')}
+  compare-schemas ./appsettings.json ./dev.appsettings.json ./qa.appsettings.json ./prd.appsettings.yaml
 
 `.trimStart()
 
