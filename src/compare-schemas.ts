@@ -1,5 +1,5 @@
 import { FileState } from './index.types'
-import { ValidatedFiles } from './messages/wrong-schema-message'
+import { ValidatedFiles } from './messages'
 import GenerateSchema from 'generate-schema'
 import { makeAllTreeNodesRequired } from './make-all-tree-nodes-required'
 import Ajv from 'ajv-draft-04'
@@ -8,7 +8,7 @@ const ajv = new Ajv({ allErrors: true })
 
 function compareSchemas(
   referenceObject: FileState,
-  objectInstances: FileState[],
+  ...objectInstances: FileState[]
 ): ValidatedFiles[] {
   const schema = GenerateSchema.json(referenceObject.fileContent)
   const requiredSchema = makeAllTreeNodesRequired(schema)

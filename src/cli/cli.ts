@@ -28,7 +28,7 @@ const main = async (args: string[]): Promise<void> => {
     const [referenceObject, ...objectInstances] = await readFiles(
       filePathWithNames,
     )
-    const validatedFiles = compareSchemas(referenceObject, objectInstances)
+    const validatedFiles = compareSchemas(referenceObject, ...objectInstances)
 
     if (validatedFiles.some(s => !s.isFileValid)) {
       const errorMessage = wrongSchemaMessage(validatedFiles)
