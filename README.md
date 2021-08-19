@@ -9,13 +9,8 @@
 Make sure you have [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com) installed.
 
 ```
-npm install -g compare-schemas
-compare-schemas ./file1.json ./file2.json
-```
-or 
-
-```sh
-npx compare-schemas ./file1.json ./file2.json ./file3.yml
+npm install -g compare-json-schemas
+compare-schemas ./file1.json ./file2.json ./file3.yaml
 ```
 
 ### How is this different from tools like the brilliant [ajv-cli](https://github.com/ajv-validator/ajv-cli) and [jsonlint-cli](https://github.com/marionebl/jsonlint-cli)
